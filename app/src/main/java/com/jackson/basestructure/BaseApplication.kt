@@ -1,10 +1,7 @@
 package com.jackson.basestructure
 
 import androidx.multidex.MultiDexApplication
-import com.jackson.basestructure.base.koin.appModules
-import com.jackson.basestructure.base.koin.dataSourceModules
-import com.jackson.basestructure.base.koin.repositoriesModules
-import com.jackson.basestructure.base.koin.viewModels
+import com.jackson.basestructure.base.koin.*
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -34,6 +31,7 @@ class BaseApplication: MultiDexApplication() {
             androidLogger()
             androidContext(this@BaseApplication)
             modules(appModules)
+            modules(databaseModules)
             modules(dataSourceModules)
             modules(repositoriesModules)
             modules(viewModels)

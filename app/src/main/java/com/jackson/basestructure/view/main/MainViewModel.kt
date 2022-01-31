@@ -6,13 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import com.jackson.basestructure.base.isEmptyGuideVisible
 import com.jackson.basestructure.base.isVisible
 import com.jackson.basestructure.base.viewModel.BaseViewModel
+import com.jackson.basestructure.repository.TitleCountRepository
 import com.jackson.basestructure.repository.TodoRepository
+import com.jackson.basestructure.repository.model.TitleCount
 import com.jackson.basestructure.repository.model.Todo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 
-class MainViewModel(private val todoRepository: TodoRepository) : BaseViewModel() {
+class MainViewModel(private val todoRepository: TodoRepository, private val titleCountRepository: TitleCountRepository) : BaseViewModel() {
+
+    private val _titleCount: MutableLiveData<TitleCount> = MutableLiveData()
+    val titleCount: LiveData<TitleCount> = _titleCount
 
     private val _todos: MutableLiveData<List<Todo>> = MutableLiveData()
     val todos: LiveData<List<Todo>> = _todos
@@ -33,6 +36,44 @@ class MainViewModel(private val todoRepository: TodoRepository) : BaseViewModel(
                 _visible.value = todos.isVisible()
                 _emptyVisible.value = todos.isEmptyGuideVisible()
             }
+        }
+    }
+
+    fun laodTitleCount(defaultTitle: String) = launch(Dispatchers.IO) {
+        titleCountRepository.getTitleCount().let { titleCount ->
+            if (titleCount == null) {
+                val titleCount = titleCountRepository.setTitleCount(defaultTitle, 0)
+                _titleCount.postValue(titleCount)
+            } else {
+                _titleCount.postValue(titleCount)
+            }
+        }
+    }
+
+    fun plusTitleCount(): Int {
+        titleCount.value.let {
+            val title = it?.title ?: ""
+            val count = it?.count?.plus(1) ?: 0
+            launch(Dispatchers.IO) {
+                val titleCount = titleCountRepository.setTitleCount(title, count)
+                _titleCount.postValue(titleCount)
+            }
+            return count
+        }
+    }
+
+    fun minusTitleCount(): Int {
+        titleCount.value.let {
+            val title = it?.title ?: ""
+            val count = it?.count?.minus(1) ?: 0
+
+            if (count >= 0) {
+                launch(Dispatchers.IO) {
+                    _titleCount.postValue(titleCountRepository.setTitleCount(title, count))
+                }
+            }
+
+            return count
         }
     }
 }

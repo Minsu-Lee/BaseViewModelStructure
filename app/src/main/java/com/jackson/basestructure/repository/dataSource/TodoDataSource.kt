@@ -1,7 +1,7 @@
 package com.jackson.basestructure.repository.dataSource
 
 import com.jackson.basestructure.network.API
-import com.jackson.basestructure.network.TodoService
+import com.jackson.basestructure.repository.dataSource.dao.TodoService
 import com.jackson.basestructure.repository.dataSource.dto.TodoResponse
 
 class TodoDataSource {
