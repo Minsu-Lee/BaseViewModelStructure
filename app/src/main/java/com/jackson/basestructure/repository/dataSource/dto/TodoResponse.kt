@@ -16,15 +16,12 @@ data class TodoResponse(var results: List<TodoDto>) : Parcelable {
                        @SerializedName("title")
                        var title: String,
                        @SerializedName("completed")
-                       var completed: Boolean) : Parcelable {
-
-
-    }
+                       var completed: Boolean) : Parcelable
 }
 
 fun TodoResponse.TodoDto.convert(): Todo {
     return Todo(userId = this.userId,
-        id = this.id,
-        title = this.title,
-        completed = this.completed)
+                id = this.id,
+                title = this.title,
+                completed = this.completed)
 }

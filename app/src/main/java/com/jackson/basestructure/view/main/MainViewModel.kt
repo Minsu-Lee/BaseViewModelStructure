@@ -30,7 +30,6 @@ class MainViewModel(private val todoRepository: TodoRepository, private val titl
 
     fun requestTodoList() = launch(Dispatchers.IO) {
         todoRepository.getTodoList().let { todos ->
-
             withContext(Dispatchers.Main) {
                 _todos.value = todos
                 _visible.value = todos.isVisible()

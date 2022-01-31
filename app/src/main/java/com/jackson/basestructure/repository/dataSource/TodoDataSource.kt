@@ -9,5 +9,4 @@ class TodoDataSource {
     suspend fun getTodoList(): List<TodoResponse.TodoDto> {
         return API.typicode(TodoService::class.java).getTodos()
     }
-
 }

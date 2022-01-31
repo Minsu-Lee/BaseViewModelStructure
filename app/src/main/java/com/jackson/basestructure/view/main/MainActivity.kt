@@ -16,7 +16,8 @@ import com.jackson.basestructure.base.viewModel.BaseViewModel
 import com.jackson.basestructure.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R.layout.activity_main), BaseRecyclerAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R.layout.activity_main),
+    BaseRecyclerAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     lateinit var adapter: TodoListAdapter
 
