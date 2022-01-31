@@ -16,13 +16,19 @@ object API {
     }
 
 
-    private fun retrofit(): Retrofit = Retrofit.Builder()
-        .baseUrl(UrlInfo.BASE_URL)
+    private fun retrofit(baseUrl: String = UrlInfo.BASE_URL, builderBlock: Retrofit.Builder.()->Unit = {}): Retrofit = Retrofit.Builder()
+        .baseUrl(baseUrl)
         .addConverterFactory(GsonConverterFactory.create())
         //.addCallAdapterFactory(CoroutineCallAdapterFactory())
+        .apply(builderBlock)
         .client(httpClient)
         .build()
 
-    fun <T> retrofit(service: Class<T>): T = retrofit().create(service)
+    fun <T> typicode(service: Class<T>): T = retrofit(UrlInfo.BASE_URL).create(service)
+
+//    fun <T> typicode(service: Class<T>): T = retrofit(UrlInfo.BASE_URL) {
+//        // apply block
+//        // addCallAdapterFactory(CoroutineCallAdapterFactory())
+//    }.create(service)
 
 }

@@ -1,21 +1,21 @@
 package com.jackson.basestructure.view.main
 
 import android.view.View
-import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.jackson.basestructure.R
 import com.jackson.basestructure.base.adapter.BaseRecyclerAdapter
+import com.jackson.basestructure.base.observer
 import com.jackson.basestructure.base.toArrayList
 import com.jackson.basestructure.base.toast
 import com.jackson.basestructure.base.view.BaseViewModelActivity
 import com.jackson.basestructure.base.viewModel.BaseViewModel
 import com.jackson.basestructure.databinding.ActivityMainBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R.layout.activity_main), BaseRecyclerAdapter.OnItemClickListener {
 
-    override val vm: MainViewModel = MainViewModel()
+    override val vm: MainViewModel by viewModel()
     lateinit var adapter: TodoListAdapter
 
     override fun onCreate() {
@@ -38,11 +38,11 @@ class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R
     }
 
     private fun loadData() {
-        vm.todos.observe(this, Observer { todos ->
+        observer(vm.todos) { todos ->
             if (this::adapter.isInitialized) {
                 adapter.updateItem(todos.toArrayList())
             }
-        })
+        }
         vm.requestTodoList()
     }
 
