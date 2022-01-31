@@ -5,37 +5,61 @@ import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
-import com.jackson.basestructure.BaseApplication
+import com.jackson.basestructure.base.coroutine.BaseCoroutineScope
 import com.jackson.basestructure.base.viewModel.BaseViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlin.coroutines.CoroutineContext
+
+// init CoroutineScope, BaseActivity
+abstract class BaseActivity(private val dispatchers: CoroutineContext = Dispatchers.Main): AppCompatActivity(), BaseCoroutineScope {
+
+    override val job: Job = Job()
+
+    override val coroutineContext: CoroutineContext
+        get() = dispatchers + job
+
+    override fun releaseCoroutine() {
+        job.cancel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        releaseCoroutine()
+    }
+}
 
 // DataBinding, BaseActivity
-abstract class BaseBindingActivity<V : ViewDataBinding>(@LayoutRes private val layoutRes: Int): AppCompatActivity() {
+abstract class BaseDataBindingActivity<V : ViewDataBinding>(@LayoutRes private val layoutRes: Int): BaseActivity() {
 
-    private lateinit var binding: V
+    protected lateinit var binding: V
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, layoutRes)
-        binding.onCreate(savedInstanceState)
-        binding.onCreate()
+        binding.lifecycleOwner = this
+        onCreate()
     }
 
-    open fun V.onCreate() = Unit
-    open fun V.onCreate(savedInstanceState: Bundle?) = Unit
+    open fun onCreate() = Unit
+
+    fun setActionBarTitle(title: String) {
+        supportActionBar?.title = title
+    }
 }
 
 // DataBinding & ViewModel, BaseActivity
-abstract class BaseViewModelActivity<T : ViewDataBinding, M: BaseViewModel>(@LayoutRes private val layoutRes: Int): BaseBindingActivity<T>(layoutRes) {
+abstract class BaseViewModelActivity<V : ViewDataBinding, M: BaseViewModel>(@LayoutRes private val layoutRes: Int): BaseDataBindingActivity<V>(layoutRes) {
 
-    abstract val viewModel: M
+    abstract val vm: M
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        vm.initViewModel(this)
         super.onCreate(savedInstanceState)
-        viewModel.initViewModel()
     }
 
-    private fun BaseViewModel.initViewModel() {
-        applicationContext = BaseApplication.getApplicationContext()
-        lifecycleOwner = this@BaseViewModelActivity
+    override fun onDestroy() {
+        super.onDestroy()
+        vm.releaseCoroutine()
     }
 }
