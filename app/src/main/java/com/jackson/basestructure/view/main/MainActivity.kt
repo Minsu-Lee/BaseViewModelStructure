@@ -5,6 +5,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.jackson.basestructure.R
 import com.jackson.basestructure.base.adapter.BaseRecyclerAdapter
 import com.jackson.basestructure.base.observer
@@ -15,10 +16,11 @@ import com.jackson.basestructure.base.viewModel.BaseViewModel
 import com.jackson.basestructure.databinding.ActivityMainBinding
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R.layout.activity_main), BaseRecyclerAdapter.OnItemClickListener {
+class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R.layout.activity_main), BaseRecyclerAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
+
+    lateinit var adapter: TodoListAdapter
 
     override val vm: MainViewModel by viewModel()
-    lateinit var adapter: TodoListAdapter
 
     override fun onCreate() {
         initView()
@@ -48,11 +50,24 @@ class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R
             if (this::adapter.isInitialized) {
                 adapter.updateItem(todos.toArrayList())
             }
+
+            // progress hide
+            binding.refreshLayout.isRefreshing = false
         }
+
+        // init refresh listener
+        binding.refreshLayout.setOnRefreshListener(this)
     }
 
     private fun loadData() {
         vm.laodTitleCount("TODOS")
+        vm.requestTodoList()
+    }
+
+    override fun onRefresh() {
+        if (this::adapter.isInitialized) {
+            this.adapter.clearItem()
+        }
         vm.requestTodoList()
     }
 
