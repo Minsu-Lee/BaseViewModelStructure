@@ -1,4 +1,4 @@
-package com.jackson.basestructure.database
+package com.jackson.basestructure.base.database
 
 import android.content.Context
 import androidx.room.Database

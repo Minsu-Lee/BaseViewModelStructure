@@ -41,12 +41,14 @@ class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R
             }.also { this@MainActivity.adapter = it }
         }
 
+        // viewModel titleCount 상태 구독
         observer(vm.titleCount) { titleCnt ->
             val title = titleCnt.title
             val cntStr = if (titleCnt.count > 0) " - ${titleCnt.count}" else ""
             setActionBarTitle("$title$cntStr")
         }
 
+        // viewModel todos 상태 구독
         observer(vm.todos) { todos ->
             if (this::adapter.isInitialized) {
                 adapter.updateItem(todos.toArrayList())
@@ -65,6 +67,7 @@ class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R
         vm.requestTodoList()
     }
 
+    // 새로고침
     override fun onRefresh() {
         if (this::adapter.isInitialized) {
             this.adapter.clearItem()
@@ -85,8 +88,14 @@ class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
-            R.id.plus -> vm.plusTitleCount() > 0
-            R.id.minus -> vm.minusTitleCount() > 0
+            R.id.plus -> {
+                vm.plusTitleCount()
+                true
+            }
+            R.id.minus -> {
+                vm.minusTitleCount() > 0
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }

@@ -8,8 +8,8 @@ import com.jackson.basestructure.base.isVisible
 import com.jackson.basestructure.base.viewModel.BaseViewModel
 import com.jackson.basestructure.repository.TitleCountRepository
 import com.jackson.basestructure.repository.TodoRepository
-import com.jackson.basestructure.repository.model.TitleCount
-import com.jackson.basestructure.repository.model.Todo
+import com.jackson.basestructure.repository.vo.TitleCount
+import com.jackson.basestructure.repository.vo.Todo
 import kotlinx.coroutines.*
 
 class MainViewModel(private val todoRepository: TodoRepository, private val titleCountRepository: TitleCountRepository) : BaseViewModel() {
@@ -28,6 +28,7 @@ class MainViewModel(private val todoRepository: TodoRepository, private val titl
     private val _emptyVisible: MutableLiveData<Int> = MutableLiveData(View.VISIBLE)
     val emptyVisible: LiveData<Int> = _emptyVisible
 
+    // [ API ] todos api 호출
     fun requestTodoList() = launch(Dispatchers.IO) {
         todoRepository.getTodoList().let { todos ->
             withContext(Dispatchers.Main) {
@@ -38,6 +39,7 @@ class MainViewModel(private val todoRepository: TodoRepository, private val titl
         }
     }
 
+    // [ DB ] title count 불러오기
     fun laodTitleCount(defaultTitle: String) = launch(Dispatchers.IO) {
         titleCountRepository.getTitleCount().let { titleCount ->
             if (titleCount == null) {
@@ -49,10 +51,11 @@ class MainViewModel(private val todoRepository: TodoRepository, private val titl
         }
     }
 
-    fun plusTitleCount(): Int {
+    // [ DB ] title count 증가
+    fun plusTitleCount(increaseCnt: Int = 1): Int {
         titleCount.value.let {
             val title = it?.title ?: ""
-            val count = it?.count?.plus(1) ?: 0
+            val count = it?.count?.plus(increaseCnt) ?: 0
             launch(Dispatchers.IO) {
                 val titleCount = titleCountRepository.setTitleCount(title, count)
                 _titleCount.postValue(titleCount)
@@ -61,10 +64,11 @@ class MainViewModel(private val todoRepository: TodoRepository, private val titl
         }
     }
 
-    fun minusTitleCount(): Int {
+    // [ DB ] title count 감소
+    fun minusTitleCount(decreaseCnt: Int = 1): Int {
         titleCount.value.let {
             val title = it?.title ?: ""
-            val count = it?.count?.minus(1) ?: 0
+            val count = it?.count?.minus(decreaseCnt) ?: 0
 
             if (count >= 0) {
                 launch(Dispatchers.IO) {

@@ -1,9 +1,9 @@
 package com.jackson.basestructure.repository.dataSource
 
-import com.jackson.basestructure.database.TitleCountDatabase
+import com.jackson.basestructure.base.database.TitleCountDatabase
 import com.jackson.basestructure.repository.dataSource.dto.TitleCountEntity
 import com.jackson.basestructure.repository.dataSource.dto.convert
-import com.jackson.basestructure.repository.model.TitleCount
+import com.jackson.basestructure.repository.vo.TitleCount
 
 class TitleCountDataSource(private val titleCountDatabase: TitleCountDatabase) {
 

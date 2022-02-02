@@ -20,6 +20,7 @@ abstract class BaseViewModel(private val dispatchers: CoroutineContext = Dispatc
     override val coroutineContext: CoroutineContext
         get() = dispatchers + job
 
+    // BaseViewModelActivity 에서 onDestroy 시점에 호출
     override fun releaseCoroutine() {
         job.cancel()
     }

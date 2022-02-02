@@ -1,7 +1,7 @@
 package com.jackson.basestructure.repository.dataSource.dao
 
 import androidx.room.*
-import com.jackson.basestructure.database.TitleCountDatabase
+import com.jackson.basestructure.base.database.TitleCountDatabase
 import com.jackson.basestructure.repository.dataSource.dto.TitleCountEntity
 
 @Dao

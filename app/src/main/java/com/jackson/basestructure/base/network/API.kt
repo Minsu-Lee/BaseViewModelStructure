@@ -1,4 +1,4 @@
-package com.jackson.basestructure.network
+package com.jackson.basestructure.base.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

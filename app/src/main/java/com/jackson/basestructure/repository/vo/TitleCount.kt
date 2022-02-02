@@ -1,4 +1,4 @@
-package com.jackson.basestructure.repository.model
+package com.jackson.basestructure.repository.vo
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize

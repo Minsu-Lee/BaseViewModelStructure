@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.jackson.basestructure.base.adapter.BaseRecyclerAdapter
 import com.jackson.basestructure.databinding.ListitemTodoBinding
-import com.jackson.basestructure.repository.model.Todo
+import com.jackson.basestructure.repository.vo.Todo
 
 class TodoListAdapter(itemList: ArrayList<Todo> = arrayListOf()): BaseRecyclerAdapter<Todo, TodoViewHolder>(itemList) {
 

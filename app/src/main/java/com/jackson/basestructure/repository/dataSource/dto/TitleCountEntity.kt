@@ -2,7 +2,7 @@ package com.jackson.basestructure.repository.dataSource.dto
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.jackson.basestructure.repository.model.TitleCount
+import com.jackson.basestructure.repository.vo.TitleCount
 
 @Entity(tableName = "title_count_table")
 data class TitleCountEntity(var title: String,

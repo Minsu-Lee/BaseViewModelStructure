@@ -1,7 +1,7 @@
 package com.jackson.basestructure.repository
 
 import com.jackson.basestructure.repository.dataSource.TitleCountDataSource
-import com.jackson.basestructure.repository.model.TitleCount
+import com.jackson.basestructure.repository.vo.TitleCount
 
 class TitleCountRepository(private val titleCountDataSource: TitleCountDataSource) {
 

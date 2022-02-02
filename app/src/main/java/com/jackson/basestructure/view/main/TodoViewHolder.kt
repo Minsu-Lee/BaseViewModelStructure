@@ -3,7 +3,7 @@ package com.jackson.basestructure.view.main
 import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import com.jackson.basestructure.databinding.ListitemTodoBinding
-import com.jackson.basestructure.repository.model.Todo
+import com.jackson.basestructure.repository.vo.Todo
 
 class TodoViewHolder(private val binding: ListitemTodoBinding): RecyclerView.ViewHolder(binding.root) {
 
