@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.jackson.basestructure.repository.dataSource.dao.TitleCountDao
 import com.jackson.basestructure.repository.dataSource.dto.TitleCountEntity
 
-@Database(entities = [TitleCountEntity::class], version = 1)
+@Database(entities = [TitleCountEntity::class], version = 1, exportSchema = false)
 abstract class TitleCountDatabase: RoomDatabase() {
 
     abstract fun titleCountDao(): TitleCountDao
