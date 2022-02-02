@@ -32,6 +32,7 @@ class BaseApplication: MultiDexApplication() {
             androidContext(this@BaseApplication)
             modules(appModules)
             modules(databaseModules)
+            modules(serviceModules)
             modules(dataSourceModules)
             modules(repositoriesModules)
             modules(viewModels)

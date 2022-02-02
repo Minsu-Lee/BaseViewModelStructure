@@ -1,18 +1,18 @@
 package com.jackson.basestructure.repository.dataSource
 
-import com.jackson.basestructure.base.database.TitleCountDatabase
+import com.jackson.basestructure.repository.dataSource.dao.TitleCountDao
 import com.jackson.basestructure.repository.dataSource.dto.TitleCountEntity
 import com.jackson.basestructure.repository.dataSource.dto.convert
 import com.jackson.basestructure.repository.vo.TitleCount
 
-class TitleCountDataSource(private val titleCountDatabase: TitleCountDatabase) {
+class TitleCountDataSource(private val titleCountDao: TitleCountDao) {
 
     suspend fun getTitleCount(): TitleCount? {
-        return titleCountDatabase.titleCountDao().getTitleCountEntity()?.convert()
+        return titleCountDao.getTitleCountEntity()?.convert()
     }
 
     suspend fun setTitleCount(title: String, count: Int): TitleCount {
-        titleCountDatabase.titleCountDao().run {
+        with(titleCountDao) {
             if (getTitleCount() == null) {
                 insertCount(TitleCountEntity(title, count))
             } else {
