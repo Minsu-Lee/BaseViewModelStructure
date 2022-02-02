@@ -40,7 +40,7 @@ class MainViewModel(private val todoRepository: TodoRepository, private val titl
     }
 
     // [ DB ] title count 불러오기
-    fun laodTitleCount(defaultTitle: String) = launch(Dispatchers.IO) {
+    fun loadTitleCount(defaultTitle: String) = launch(Dispatchers.IO) {
         titleCountRepository.getTitleCount().let { titleCount ->
             if (titleCount == null) {
                 val titleCount = titleCountRepository.setTitleCount(defaultTitle, 0)

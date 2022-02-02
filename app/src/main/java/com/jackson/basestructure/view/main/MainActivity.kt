@@ -63,7 +63,7 @@ class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R
     }
 
     private fun loadData() {
-        vm.laodTitleCount("TODOS")
+        vm.loadTitleCount("TODOS")
         vm.requestTodoList()
     }
 
