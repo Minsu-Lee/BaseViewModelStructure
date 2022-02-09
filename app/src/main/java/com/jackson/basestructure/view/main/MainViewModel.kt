@@ -4,7 +4,6 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.jackson.basestructure.base.isEmptyGuideVisible
-import com.jackson.basestructure.base.isVisible
 import com.jackson.basestructure.base.viewModel.BaseViewModel
 import com.jackson.basestructure.repository.TitleCountRepository
 import com.jackson.basestructure.repository.TodoRepository
