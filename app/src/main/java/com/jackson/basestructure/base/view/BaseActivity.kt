@@ -2,10 +2,12 @@ package com.jackson.basestructure.base.view
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
+import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import com.jackson.basestructure.base.coroutine.BaseCoroutineScope
+import com.jackson.basestructure.base.string
 import com.jackson.basestructure.base.viewModel.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -45,6 +47,10 @@ abstract class BaseDataBindingActivity<V : ViewDataBinding>(@LayoutRes private v
 
     fun setActionBarTitle(title: String) {
         supportActionBar?.title = title
+    }
+
+    fun setActionBarTitle(@StringRes titleRes: Int) {
+        setActionBarTitle(string(titleRes))
     }
 }
 

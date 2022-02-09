@@ -7,6 +7,14 @@
         <variable
             name="vm"
             type="com.jackson.basestructure.view.main.MainViewModel" />
+
+        <variable
+            name="layoutManager"
+            type="androidx.recyclerview.widget.LinearLayoutManager" />
+
+        <variable
+            name="adapter"
+            type="com.jackson.basestructure.view.main.TodoListAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -26,6 +34,8 @@
                 android:id="@+id/rvTodoList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:adapter="@{adapter}"
+                app:layoutManager="@{layoutManager}"
                 tools:itemCount="5"
                 tools:listitem="@layout/listitem_todo"/>
 

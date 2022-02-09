@@ -8,6 +8,10 @@ import com.jackson.basestructure.repository.vo.Todo
 
 class TodoListAdapter(itemList: ArrayList<Todo> = arrayListOf()): BaseRecyclerAdapter<Todo, TodoViewHolder>(itemList) {
 
+    constructor(clickListener: OnItemClickListener): this(itemList = arrayListOf()) {
+        setOnItemClickListener(clickListener)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val binding = ListitemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return TodoViewHolder(binding)

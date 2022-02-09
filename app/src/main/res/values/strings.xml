@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">BaseStructure</string>
+    <string name="not_found_msg">item not found!</string>
 </resources>

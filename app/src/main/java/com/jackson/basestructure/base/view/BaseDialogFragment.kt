@@ -103,7 +103,6 @@ abstract class BaseBindingDialogFragment<V : ViewDataBinding>(@LayoutRes private
 
     open fun V.onViewCreated() = Unit
     open fun V.onViewCreated(view: View, savedInstanceState: Bundle?) = Unit
-
 }
 
 // DataBinding & ViewModel, BaseFragment

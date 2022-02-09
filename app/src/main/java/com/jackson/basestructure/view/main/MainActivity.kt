@@ -14,12 +14,11 @@ import com.jackson.basestructure.base.toast
 import com.jackson.basestructure.base.view.BaseViewModelActivity
 import com.jackson.basestructure.base.viewModel.BaseViewModel
 import com.jackson.basestructure.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.activity_main.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R.layout.activity_main),
     BaseRecyclerAdapter.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
-
-    lateinit var adapter: TodoListAdapter
 
     override val vm: MainViewModel by viewModel()
 
@@ -30,55 +29,49 @@ class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R
 
     private fun initView() {
         // toolbar, title
-        setActionBarTitle("TODOS")
-        // databinding, viewModel 주입
-        binding.vm = vm
+        setActionBarTitle(R.string.app_name)
 
-        with(binding.rvTodoList) {
-            layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
-            adapter = TodoListAdapter().apply {
-                setOnItemClickListener(this@MainActivity)
-            }.also { this@MainActivity.adapter = it }
+        // databinding, viewModel 주입
+        with(binding) {
+            // data variable 주입
+            this.vm = this@MainActivity.vm
+            this.layoutManager = LinearLayoutManager(this@MainActivity, RecyclerView.VERTICAL, false)
+            this.adapter = TodoListAdapter(this@MainActivity)
+
+            // viewModel todos 상태 구독
+            observer(this@MainActivity.vm.todos) { todos ->
+                // [ todos의 값이 변경될 경우 ]
+                this.adapter?.updateItem(todos.toArrayList())
+                // progress hide
+                refreshLayout.isRefreshing = false
+            }
+
+            // init refresh listener
+            refreshLayout.setOnRefreshListener(this@MainActivity)
         }
 
         // viewModel titleCount 상태 구독
         observer(vm.titleCount) { titleCnt ->
-            val title = titleCnt.title
-            val cntStr = if (titleCnt.count > 0) " - ${titleCnt.count}" else ""
-            setActionBarTitle("$title$cntStr")
+            val cntStr = if (titleCnt.count > 0) " ( ${titleCnt.count} )" else ""
+            setActionBarTitle("${titleCnt.title}$cntStr")
         }
-
-        // viewModel todos 상태 구독
-        observer(vm.todos) { todos ->
-            if (this::adapter.isInitialized) {
-                adapter.updateItem(todos.toArrayList())
-            }
-
-            // progress hide
-            binding.refreshLayout.isRefreshing = false
-        }
-
-        // init refresh listener
-        binding.refreshLayout.setOnRefreshListener(this)
     }
 
     private fun loadData() {
-        vm.loadTitleCount("TODOS")
+        vm.loadTitleCount(R.string.app_name)
         vm.requestTodoList()
     }
 
     // 새로고침
     override fun onRefresh() {
-        if (this::adapter.isInitialized) {
-            this.adapter.clearItem()
-        }
+        binding.adapter?.clearItem()
         vm.requestTodoList()
     }
 
     override fun onItemClick(view: View, position: Int) {
         vm.todos.value?.get(position)?.title?.let { title ->
             toast(title)
-        } ?: toast("item not found!")
+        } ?: toast(R.string.not_found_msg)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -88,14 +81,8 @@ class MainActivity : BaseViewModelActivity<ActivityMainBinding, BaseViewModel>(R
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when(item.itemId) {
-            R.id.plus -> {
-                vm.plusTitleCount()
-                true
-            }
-            R.id.minus -> {
-                vm.minusTitleCount() > 0
-                true
-            }
+            R.id.plus -> vm.plusTitleCount()
+            R.id.minus -> vm.minusTitleCount()
             else -> super.onOptionsItemSelected(item)
         }
     }

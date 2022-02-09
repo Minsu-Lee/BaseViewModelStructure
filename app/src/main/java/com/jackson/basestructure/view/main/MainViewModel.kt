@@ -1,9 +1,10 @@
 package com.jackson.basestructure.view.main
 
 import android.view.View
+import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.jackson.basestructure.base.isEmptyGuideVisible
+import com.jackson.basestructure.base.string
 import com.jackson.basestructure.base.viewModel.BaseViewModel
 import com.jackson.basestructure.repository.TitleCountRepository
 import com.jackson.basestructure.repository.TodoRepository
@@ -28,7 +29,7 @@ class MainViewModel(private val todoRepository: TodoRepository, private val titl
         todoRepository.getTodoList().let { todos ->
             withContext(Dispatchers.Main) {
                 _todos.value = todos
-                _isEmptyVisible.value = todos.isEmptyGuideVisible()
+                _isEmptyVisible.value = if (todos.isNotEmpty()) View.GONE else View.VISIBLE
             }
         }
     }
@@ -36,41 +37,36 @@ class MainViewModel(private val todoRepository: TodoRepository, private val titl
     // [ DB ] title count 불러오기
     fun loadTitleCount(defaultTitle: String) = launch(Dispatchers.IO) {
         titleCountRepository.getTitleCount().let { titleCount ->
-            if (titleCount == null) {
-                val titleCount = titleCountRepository.setTitleCount(defaultTitle, 0)
-                _titleCount.postValue(titleCount)
-            } else {
-                _titleCount.postValue(titleCount)
-            }
+            (titleCount ?: titleCountRepository.setTitleCount(defaultTitle, 0)).let(_titleCount::postValue)
         }
     }
 
+    // [ DB ] title count 불러오기
+    fun loadTitleCount(@StringRes defaultTitleRes: Int) = loadTitleCount(string(defaultTitleRes))
+
     // [ DB ] title count 증가
-    fun plusTitleCount(increaseCnt: Int = 1): Int {
-        titleCount.value.let {
-            val title = it?.title ?: ""
-            val count = it?.count?.plus(increaseCnt) ?: 0
-            launch(Dispatchers.IO) {
-                val titleCount = titleCountRepository.setTitleCount(title, count)
-                _titleCount.postValue(titleCount)
+    fun plusTitleCount(increaseCnt: Int = 1): Boolean {
+        launch(Dispatchers.IO) {
+            titleCount.value.let {
+                val title = it?.title ?: ""
+                val count = it?.count?.plus(increaseCnt) ?: 0
+                titleCountRepository.setTitleCount(title, count).let(_titleCount::postValue)
             }
-            return count
         }
+        return true
     }
 
     // [ DB ] title count 감소
-    fun minusTitleCount(decreaseCnt: Int = 1): Int {
-        titleCount.value.let {
-            val title = it?.title ?: ""
-            val count = it?.count?.minus(decreaseCnt) ?: 0
-
-            if (count >= 0) {
-                launch(Dispatchers.IO) {
-                    _titleCount.postValue(titleCountRepository.setTitleCount(title, count))
+    fun minusTitleCount(decreaseCnt: Int = 1): Boolean {
+        launch(Dispatchers.IO) {
+            titleCount.value.let {
+                val title = it?.title ?: ""
+                val count = it?.count?.minus(decreaseCnt) ?: -1
+                if (count >= 0) {
+                    titleCountRepository.setTitleCount(title, count).let(_titleCount::postValue)
                 }
             }
-
-            return count
         }
+        return true
     }
 }
