@@ -26,7 +26,6 @@
                 android:id="@+id/rvTodoList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="@{vm.visible}"
                 tools:itemCount="5"
                 tools:listitem="@layout/listitem_todo"/>
 
@@ -36,8 +35,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="not found, todo List"
+            android:background="@color/white"
             android:gravity="center"
-            android:visibility="@{vm.emptyVisible}"
+            android:visibility="@{vm.isEmptyVisible}"
             tools:visibility="gone"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

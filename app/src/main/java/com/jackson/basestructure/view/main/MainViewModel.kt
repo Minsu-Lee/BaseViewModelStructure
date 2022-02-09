@@ -20,21 +20,16 @@ class MainViewModel(private val todoRepository: TodoRepository, private val titl
     private val _todos: MutableLiveData<List<Todo>> = MutableLiveData()
     val todos: LiveData<List<Todo>> = _todos
 
-    // recyclerView, visible
-    private val _visible: MutableLiveData<Int> = MutableLiveData(View.GONE)
-    val visible: LiveData<Int> = _visible
-
     // empty guide layout, visible
-    private val _emptyVisible: MutableLiveData<Int> = MutableLiveData(View.VISIBLE)
-    val emptyVisible: LiveData<Int> = _emptyVisible
+    private val _isEmptyVisible: MutableLiveData<Int> = MutableLiveData(View.VISIBLE)
+    val isEmptyVisible: LiveData<Int> = _isEmptyVisible
 
     // [ API ] todos api 호출
     fun requestTodoList() = launch(Dispatchers.IO) {
         todoRepository.getTodoList().let { todos ->
             withContext(Dispatchers.Main) {
                 _todos.value = todos
-                _visible.value = todos.isVisible()
-                _emptyVisible.value = todos.isEmptyGuideVisible()
+                _isEmptyVisible.value = todos.isEmptyGuideVisible()
             }
         }
     }
