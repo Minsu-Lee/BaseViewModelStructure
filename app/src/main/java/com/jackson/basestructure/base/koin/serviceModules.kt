@@ -5,5 +5,5 @@ import com.jackson.basestructure.repository.dataSource.dao.TodoService
 import org.koin.dsl.module
 
 val serviceModules = module {
-    single { API.typicode(TodoService::class.java) }
+    factory { API.typicode(TodoService::class.java) }
 }

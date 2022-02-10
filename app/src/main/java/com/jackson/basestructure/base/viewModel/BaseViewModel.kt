@@ -29,16 +29,4 @@ abstract class BaseViewModel(private val dispatchers: CoroutineContext = Dispatc
         this.applicationContext = BaseApplication.getApplicationContext()
         this.lifecycleOwner = lifecycleOwner
     }
-
-    //    // RxJava, 사용하는 경우
-//    private val compositeDisposable = CompositeDisposable()
-//
-//    fun addDisposable(disposable: Disposable) {
-//        compositeDisposable.add(disposable)
-//    }
-//
-//    override fun onCleared() {
-//        compositeDisposable.clear()
-//        super.onCleared()
-//    }
 }
