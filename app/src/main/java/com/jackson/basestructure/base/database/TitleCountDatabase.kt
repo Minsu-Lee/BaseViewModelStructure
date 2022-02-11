@@ -15,16 +15,12 @@ abstract class TitleCountDatabase: RoomDatabase() {
     companion object {
         const val DATABASE_NAME = "title-count-database"
         const val TITLE_COUNT_TABLE_NAME = "title_count_table"
-        private var _instance: TitleCountDatabase? = null
 
-        @Synchronized
-        fun getInstance(context: Context): TitleCountDatabase {
-            return _instance ?: synchronized(TitleCountDatabase::class) {
-                Room.databaseBuilder(context.applicationContext,
-                    TitleCountDatabase::class.java,
-                    DATABASE_NAME
-                ).build().also { _instance =  it }
-            }
+        fun createInstance(context: Context): TitleCountDatabase {
+            return Room.databaseBuilder(context.applicationContext,
+                TitleCountDatabase::class.java,
+                DATABASE_NAME
+            ).build()
         }
     }
 }

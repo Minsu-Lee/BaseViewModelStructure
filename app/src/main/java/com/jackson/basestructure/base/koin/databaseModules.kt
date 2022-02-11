@@ -6,6 +6,6 @@ import org.koin.dsl.module
 
 // default instance
 val databaseModules = module {
-    single { TitleCountDatabase.getInstance(BaseApplication.getApplicationContext()) }
-    single { (get() as TitleCountDatabase).titleCountDao() }
+    single { TitleCountDatabase.createInstance(BaseApplication.getApplicationContext()) }
+    factory { (get() as TitleCountDatabase).titleCountDao() }
 }

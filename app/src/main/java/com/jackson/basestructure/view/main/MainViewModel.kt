@@ -12,7 +12,8 @@ import com.jackson.basestructure.repository.vo.TitleCount
 import com.jackson.basestructure.repository.vo.Todo
 import kotlinx.coroutines.*
 
-class MainViewModel(private val todoRepository: TodoRepository, private val titleCountRepository: TitleCountRepository) : BaseViewModel() {
+class MainViewModel(private val todoRepository: TodoRepository,
+                    private val titleCountRepository: TitleCountRepository) : BaseViewModel() {
 
     private val _titleCount: MutableLiveData<TitleCount> = MutableLiveData()
     val titleCount: LiveData<TitleCount> = _titleCount
